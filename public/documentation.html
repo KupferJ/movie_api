@@ -20,19 +20,19 @@
       <th>URL</th>
       <th>Request Parameter</th>
       <th>HTTP Method</th>
-      <th>Response body data format</th>
       <th>Request body data format</th>
+      <th>Response body data format</th>
     </tr>
     <tr>
       <td>Returns a list of all movies to the user</td>
       <td>"/movies"</td>
       <td>none</td>
       <td>GET</td>
+      <td>none</td>
       <td>
-        A JSON object holding data about all the movies <br />
-        Example: {Title: "One Flew Over the Cuckoo's Nest", Description: "",
-        Director: { Name: "Milos Forman", Bio: "" }, Genre: { Name: "Drama",
-        Description:""} }
+        A JSON object with data on list of all the movies <br />
+        Example: {Title: "exampleTitle", Description: "movie description here", Director: { Name: "directorName", Bio: "bio description" },
+        }
       </td>
     </tr>
     <tr>
@@ -40,9 +40,11 @@
       <td>"/movies/:title"</td>
       <td>:title</td>
       <td>GET</td>
+      <td>none</td>
       <td>
-        A JSON object holding data about a single movie <br />
-        Example: {Title: "One Flew Over the Cuckoo's Nest", Description: """}
+        A JSON object with data about a single movie <br />
+        Example: Example: {Title: "exampleTitle", Description: "movie description here", Director: { Name: "directorName", Bio: "bio description" },
+        }
       </td>
     </tr>
     <tr>
@@ -50,20 +52,32 @@
       <td>"/movies/genre/:genreName"</td>
       <td>:genreName</td>
       <td>GET</td>
+      <td>none</td>
       <td>
-        A JSON object holding data about a genre <br />
-        Example: Genre: { Name: "Drama", Description:""}
+        A JSON object with data about a genre <br />
+        Example: Genre: { "name": "Thriller", "description": "description..."}
       </td>
     </tr>
-
     <tr>
-      <td>Returns data about a director by name</td>
+      <td>Returns movies an actor is in by actor's name</td>
+      <td>"/movies/actors/:actorName"</td>
+      <td>:actorName</td>
+      <td>GET</td>
+      <td>none</td>
+      <td>
+        Example: Example: {Title: "exampleTitle", Description: "movie description here", Director: { Name: "directorName", Bio: "bio description" },
+        }
+      </td>
+    </tr>
+    <tr>
+      <td>Returns details about a director by name</td>
       <td>"/movies/directors/:directorName"</td>
       <td>:directorName</td>
       <td>GET</td>
+      <td>none</td>
       <td>
-        A JSON object holding data about a director <br />
-        Exmple: Director: { Name: "Milos Forman", Bio: "" },
+        A JSON object with details about a director <br />
+        Exmple: { Name: "directorName", Bio: "director bio", Age: "56" },
       </td>
     </tr>
     <tr>
@@ -72,39 +86,65 @@
       <td>none</td>
       <td>POST</td>
       <td>
-        A JSON object holding data about new user that was added <br />
-        Example: { id: 2, name:"Hans Zimmerman", favoriteMovies:[] },
-      </td>
+          JSON object with data about the user to add <br />
+          Example: { Username: "exampleName", Password: "password1", Email: "email@gmail.com"}
+        </td>
       <td>
-        A JSON object holding data about the user to add <br />
-        Example: { id:, name : "" } }
+        JSON object with data about added new user <br />
+        Example: { "id": 5, "name":"exampleName", "favoriteMovies":[] },
+        Example: { ID: 5, Username: "exampleName", Password: "*********", "favoriteMovies":[] },
       </td>
     </tr>
     <tr>
-      <td>Allows users to update their user info</td>
+      <td>Allows users to update their info</td>
       <td>"/users/:id"</td>
       <td>:id</td>
       <td>PUT</td>
+      <td>none</td>
       <td>A text message indicating the user info was updated</td>
     </tr>
     <tr>
-      <td>Allows users to add a movie to their list of favorites</td>
-      <td>"/users/:id/:movieTitle"</td>
+      <td>Allows users to add a movie to their Favorites list</td>
+      <td>"/users/:id/favorites/:movieTitle"</td>
       <td>:movieTitle</td>
       <td>POST</td>
+      <td>none</td>
       <td>
-        A text message indicating that a movie has been added to the favorite
-        list of the user
+        A text message indicating that a movie has been added to their Favorites
+        list.
       </td>
     </tr>
     <tr>
-      <td>Allows users to remove a movie from their list of favorites</td>
-      <td>"/users/:id/:movieTitle"</td>
+      <td>Allows users to remove a movie from their Favorites list</td>
+      <td>"/users/:id/favorites/:movieTitle"</td>
       <td>:movieTitle</td>
       <td>DELETE</td>
+      <td>none</td>
       <td>
-        A text message indicating that a movie has been deleted from the
-        favorite list of the user
+        A text message indicating that a movie has been deleted from their
+        Favorites list.
+      </td>
+    </tr>
+    <tr>
+      <td>Allows users to add a movie to their To Favorites list</td>
+      <td>"/users/:id/favoriteMovies/:movieTitle"</td>
+      <td>:movieTitle</td>
+      <td>POST</td>
+      <td>none</td>
+      <td>
+        A text message indicating that a movie has been added to their favorites
+        list.
+      </td>
+    </tr>
+    <tr>
+      <td>Allows users to remove a movie from their favoriteMovies list</td>
+      <td>"/users/:id/favoriteMovies/:favoriteMovies"</td>
+      <td>:movieTitle</td>
+      <td>DELETE</td>
+      <td>none</td>
+      <td>
+        A text message indicating that a movie has been deleted from their
+        favorites list.
       </td>
     </tr>
     <tr>
@@ -112,7 +152,9 @@
       <td>"/users/:id"</td>
       <td>:id</td>
       <td>DELETE</td>
-      <td>A text message indicating that the user id has been deleted</td>
+      <td>none</td>
+      <td>A text message indicating that the user has been deleted.
+      </td>
     </tr>
   </table>
 
