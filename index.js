@@ -5,10 +5,16 @@ const express = require('express'),
   uuid = require ('uuid'),
   app = express();
 
+//use express validator
+const { check, validationResult } = require('express-validator');
 
 //use bodaparser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//use CORS
+const cors = require('cors');
+app.use(cors());
 
 //import the "auth.js" file
 let auth = require('./auth')(app);
@@ -88,7 +94,22 @@ app.get('/movies/director/:Name', passport.authenticate('jwt', { session:false }
 });
 
 //CREATE - allows user to register (username, pw, email required)
-app.post('/users', passport.authenticate('jwt', { session:false }), (req, res) => {
+app.post('/users', 
+[ //Validation logic
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], (req, res) => {
+
+// check the validation object for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({Username: req.body.Username})
     .then((user) => { //If the username already exists, show error message
       if(user) {
@@ -97,7 +118,7 @@ app.post('/users', passport.authenticate('jwt', { session:false }), (req, res) =
         Users
           .create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
@@ -144,7 +165,21 @@ app.get('/users/:Username', passport.authenticate('jwt', { session:false }), (re
 });
 
 //UPDATE - allows users to update their personal information
-app.put('/users/:Username', passport.authenticate('jwt', { session:false }), (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', { session:false }), 
+[ //Validation logic
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], (req, res) => {
+
+  // check the validation object for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Users.findOneAndUpdate({User: req.params.Username},
     {$set: { //information that can be updated
       Username: req.body.Username,
@@ -227,7 +262,8 @@ app.use((err, req, res, next) => {
   res.status(500).send('An error occured.');
 });
 
-//listen for requests
-app.listen(8080, () => {
-  console.log('Your app is listening on port 8080.');
+//listen for requests, UPDATED
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0', () => {
+  console.log('Listening on Port ' + port);
 });
