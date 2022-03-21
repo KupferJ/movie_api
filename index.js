@@ -30,7 +30,10 @@ const mongoose = require('mongoose');
     Movies = Models.Movie;
     Users = Models.User;
 
-mongoose.connect ('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+//local
+//mongoose.connect ('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+//MongoDB Atlas
+mongoose.connect (process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 //morgan middleware, specifying that requests should be logged
