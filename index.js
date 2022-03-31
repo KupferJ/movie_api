@@ -40,8 +40,10 @@ mongoose.connect (process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifie
 app.use(morgan('common'));
 
 
-// READ - return list of all movies + JWT authentication
-app.get ('/movies', passport.authenticate('jwt', { session:false }), (req, res) => {
+// READ - return list of all movies + JWT authentication (temporarily removed "passport.authenticate('jwt', { session:false }),"),
+//so the React App can fetch the api
+app.get ('/movies', //passport.authenticate('jwt', { session:false }), 
+(req, res) => {
   Movies.find()
   .then((movies) => {
     res.status(201).json(movies);
