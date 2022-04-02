@@ -5,19 +5,19 @@ const express = require('express'),
   uuid = require ('uuid'),
   app = express();
 
-//use express validator
-const { check, validationResult } = require('express-validator');
-
-//use bodaparser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 //use CORS
 const cors = require('cors');
 app.use(cors());
 
 //import the "auth.js" file
 let auth = require('./auth')(app);
+
+//use express validator
+const { check, validationResult } = require('express-validator');
+
+//use bodaparser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //import the "passport.js" file
 const passport = require('passport');
