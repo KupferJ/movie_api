@@ -27,7 +27,7 @@ app.use(morgan('common'));
 
 //use CORS
 const cors = require('cors');
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
 
 
 //import the "auth.js" file
