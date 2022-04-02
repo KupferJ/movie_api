@@ -41,7 +41,7 @@ app.use(morgan('common'));
 
 // READ - return list of all movies + JWT authentication (temporarily removed "passport.authenticate('jwt', { session:false }),"),
 //so the React App can fetch the api
-app.get ('/movies', //passport.authenticate('jwt', { session:false }), 
+app.get ('/movies', passport.authenticate('jwt', { session:false }), 
 (req, res) => {
   Movies.find()
   .then((movies) => {
