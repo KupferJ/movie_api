@@ -5,30 +5,11 @@ const express = require('express'),
   uuid = require ('uuid'),
   app = express();
 
-//use CORS
-const cors = require('cors');
-app.use(cors());
-
-//import the "auth.js" file
-let auth = require('./auth')(app);
-
-//use express validator
-const { check, validationResult } = require('express-validator');
-
-//use bodaparser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-//import the "passport.js" file
-const passport = require('passport');
-  require('./passport');
-
-const res = require('express/lib/response');
 //import mongoose and the "models.js"
 const mongoose = require('mongoose');
-    Models = require('./models.js');
-    Movies = Models.Movie;
-    Users = Models.User;
+Models = require('./models.js');
+Movies = Models.Movie;
+Users = Models.User;
 
 //local
 //mongoose.connect ('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -36,8 +17,29 @@ const mongoose = require('mongoose');
 mongoose.connect (process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
+//use bodaparser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/css"));
+
 //morgan middleware, specifying that requests should be logged
 app.use(morgan('common'));
+
+//use CORS
+const cors = require('cors');
+app.use(cors());
+
+//import the "auth.js" file
+let auth = require('./auth.js');
+const passport = require('passport');
+require('./passport');
+auth(app);
+
+//use express validator
+const { check, validationResult } = require('express-validator');
+
+// const res = require('express/lib/response');
+
 
 
 // READ - return list of all movies + JWT authentication (temporarily removed "passport.authenticate('jwt', { session:false }),"),
