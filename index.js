@@ -27,12 +27,8 @@ app.use(morgan('common'));
 
 //use CORS
 const cors = require('cors');
-var corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200,
-}
-app.use(cors(corsOptions));
-app.use(express.json())
+app.use(cors());
+
 
 //import the "auth.js" file
 let auth = require('./auth.js');
@@ -43,7 +39,7 @@ auth(app);
 //use express validator
 const { check, validationResult } = require('express-validator');
 
-// const res = require('express/lib/response');
+const res = require('express/lib/response');
 
 
 
