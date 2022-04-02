@@ -1,43 +1,42 @@
-
 const express = require('express'),
   morgan = require('morgan'),
   bodyParser = require('body-parser'),
   uuid = require ('uuid'),
   app = express();
 
-//import mongoose and the "models.js"
-const mongoose = require('mongoose');
-Models = require('./models.js');
-Movies = Models.Movie;
-Users = Models.User;
+//use express validator
+const { check, validationResult } = require('express-validator');
 
-//local
-//mongoose.connect ('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
-//MongoDB Atlas
-mongoose.connect (process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//use bodaparser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //use CORS
 const cors = require('cors');
 app.use(cors());
 
 //import the "auth.js" file
-let auth = require('./auth.')(app);
+let auth = require('./auth')(app);
+
+//import the "passport.js" file
 const passport = require('passport');
-require('./passport');
+  require('./passport');
+
+const res = require('express/lib/response');
+//import mongoose and the "models.js"
+const mongoose = require('mongoose');
+    Models = require('./models.js');
+    Movies = Models.Movie;
+    Users = Models.User;
+
+//local
+//mongoose.connect ('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+//MongoDB Atlas
+mongoose.connect (process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 //morgan middleware, specifying that requests should be logged
 app.use(morgan('common'));
-//use bodaparser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + "/css"));
-
-
-//use express validator
-const { check, validationResult } = require('express-validator');
-
-const res = require('express/lib/response');
-
 
 
 // READ - return list of all movies + JWT authentication (temporarily removed "passport.authenticate('jwt', { session:false }),"),
