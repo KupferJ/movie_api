@@ -16,13 +16,6 @@ Users = Models.User;
 //MongoDB Atlas
 mongoose.connect (process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-//morgan middleware, specifying that requests should be logged
-app.use(morgan('common'));
-//use bodaparser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + "/css"));
-
 //use CORS
 const cors = require('cors');
 app.use(cors());
@@ -31,6 +24,14 @@ app.use(cors());
 let auth = require('./auth.')(app);
 const passport = require('passport');
 require('./passport');
+
+//morgan middleware, specifying that requests should be logged
+app.use(morgan('common'));
+//use bodaparser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/css"));
+
 
 //use express validator
 const { check, validationResult } = require('express-validator');
