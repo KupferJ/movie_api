@@ -2,9 +2,8 @@
 const express = require('express'),
   morgan = require('morgan'),
   bodyParser = require('body-parser'),
-  uuid = require ('uuid');
-
-const app = express();
+  uuid = require ('uuid'),
+  app = express();
 
 //import mongoose and the "models.js"
 const mongoose = require('mongoose');
@@ -22,6 +21,7 @@ app.use(morgan('common'));
 //use bodaparser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/css"));
 
 //use CORS
 const cors = require('cors');
