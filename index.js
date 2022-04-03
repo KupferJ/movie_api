@@ -202,8 +202,8 @@ app.put('/users/:Username', passport.authenticate('jwt', { session:false }),
   });
 });
 
-//CREATE - allows user to add a movie to their favorites
-app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session:false }), (req, res) => {
+//CREATE - allows user to add a movie to their favorites (passport.authenticate('jwt', { session:false }),)
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
   Users.findOneAndUpdate({Username : req.params.Username},
     {$push: { FavoriteMovies: req.params.MovieID}},
     { new : true }) // Return the updated document
