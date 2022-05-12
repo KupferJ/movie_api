@@ -41,6 +41,12 @@ app.use(morgan('common'));
 
 // READ - return list of all movies + JWT authentication (temporarily removed "passport.authenticate('jwt', { session:false }),"),
 //so the React App can fetch the api
+/**
+ * get list of all movies
+ * @method get
+ * @param {string} endpoint (/movies)
+ * @requires authentication via JWT
+ */
 app.get ('/movies', passport.authenticate('jwt', { session:false }), 
 (req, res) => {
   Movies.find()
@@ -52,7 +58,12 @@ app.get ('/movies', passport.authenticate('jwt', { session:false }),
   });
 });
 
-//READ - return specific data about a singe movie
+/**
+ * get data about a single movie
+ * @method get
+ * @param {string} endpoint (/movies/:title)
+ * @requires authenticate via JWT
+ */
 app.get('/movies/:title', passport.authenticate('jwt', { session:false }), (req, res) => {
   Movies.findOne({Title: req.params.title})
     .then((movie) => {
@@ -67,7 +78,12 @@ app.get('/movies/:title', passport.authenticate('jwt', { session:false }), (req,
     });
 });
 
-//READ - return data about a genre by its name
+/**
+ * gets data about a genre by its name
+ * @method get
+ * @param {string} endpoint (/movies/genre/:Name)
+ * @requires authentication via JWT
+ */
 app.get('/movies/genre/:Name', passport.authenticate('jwt', { session:false }), (req, res) => {
   Movies.findOne({'Genre.Name': req.params.Name})
     .then((movie) => {
@@ -82,7 +98,12 @@ app.get('/movies/genre/:Name', passport.authenticate('jwt', { session:false }), 
     });
 });
 
-//READ - return data about a director by their name
+/**
+ * gets data about a director by their name
+ * @method get
+ * @param {string} endpoint (/movies/director/:Name)
+ * @requires authentication via JWT
+ */
 app.get('/movies/director/:Name', passport.authenticate('jwt', { session:false }), (req, res) => {
   Movies.findOne({'Director.Name': req.params.Name})
     .then((movie) => {
@@ -97,7 +118,17 @@ app.get('/movies/director/:Name', passport.authenticate('jwt', { session:false }
     });
 });
 
-//CREATE - allows user to register (username, pw, email required)
+/**
+ * registers a new user
+ * @method post
+ * @param {string} endpoint (/users)
+ * @param {string} Username -required
+ * @param {string} Password -required
+ * @param {string} Email -required
+ * @param {string} Birthday -optional
+ * @returns {object} new user
+ * 
+ */
 app.post('/users', 
 [ //Validation logic
   check('Username', 'Username is required').isLength({min: 5}),
@@ -141,7 +172,12 @@ app.post('/users',
   });
 });
 
-//READ - returns all the users
+/**
+ * gets all registered users
+ * @method get
+ * @param {string} endpoint (/users)
+ * @requires authentication via JWT
+ */
 app.get('/users', passport.authenticate('jwt', { session:false }), (req, res) => {
   Users.find()
     .then((users) => {
@@ -153,7 +189,12 @@ app.get('/users', passport.authenticate('jwt', { session:false }), (req, res) =>
     });
 });
 
-//READ - returns data on a specific user
+/**
+ * gets data from a specific user
+ * @method get
+ * @param {string} endpoint (/users/:Username)
+ * @requires authentication via JWT
+ */
 app.get('/users/:Username', passport.authenticate('jwt', { session:false }), (req, res) => {
   Users.findOne({Username: req.params.Username})
     .then((user) => {
@@ -168,7 +209,17 @@ app.get('/users/:Username', passport.authenticate('jwt', { session:false }), (re
     });
 });
 
-//UPDATE - allows users to update their personal information
+/**
+ * updates data for a specific user
+ * @method put
+ * @param {string} endpoint (/users/:Username)
+ * @param {string} Username
+ * @param {string} Password
+ * @param {string} Email
+ * @param {string} Birthday
+ * @requires authentication via JWT
+ * @returns updated user data in a JSON format
+ */
 app.put('/users/:Username', passport.authenticate('jwt', { session:false }), 
 [ //Validation logic
   check('Username', 'Username is required').isLength({min: 5}),
@@ -202,7 +253,13 @@ app.put('/users/:Username', passport.authenticate('jwt', { session:false }),
   });
 });
 
-//CREATE - allows user to add a movie to their favorites (passport.authenticate('jwt', { session:false }),)
+/**
+ * add a movie to a user's favorite movies
+ * @method post
+ * @param {string} endpoint (/users/:Username/movies/:MovieID)
+ * @requires authentication -via JWT
+ * @returns {object} updated user data in JSON format
+ */
 app.post('/users/:Username/movies/:MovieID', (req, res) => {
   Users.findOneAndUpdate({Username : req.params.Username},
     {$push: { FavoriteMovies: req.params.MovieID}},
@@ -216,7 +273,13 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
     });
 });
 
-//DELETE - allows user to delete a movie from their favorite
+/**
+ * removes a movie from a user's list of favorite movies
+ * @method delete
+ * @param {string} endpoint (/users/:Username/movies/:MovieID)
+ * @requires authentication - via JWT
+ * @returns {object} updated user data in a JSON format
+ */
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session:false }), (req, res) => {
   Users.findOneAndUpdate({Username: req.params.Username},
     {$pull: {FavoriteMovies: req.params.MovieID}},
@@ -230,7 +293,12 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
     });
 });
 
-//DELETE - allows user to deregister
+/**
+ * deletes a user's data
+ * @method delete
+ * @param {string} endpoint (/Users/:Username)
+ * @requires authentication - via JTW
+ */
 app.delete('/users/:Username', passport.authenticate('jwt', { session:false }), (req, res) => {
   Users.findOneAndRemove({Username: req.params.Username})
     .then((user) => {
@@ -247,12 +315,20 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session:false }), 
 });
 
 
-//Welcome message for the '/' URL
+/**
+ * welcome page
+ * @method get
+ * @returns {string} welcome message
+ */
 app.get('/', (req, res) => {
   res.send('Welcome to my movie application.'); 
 });
 
-
+/**
+ * documentation
+ * @method get
+ * @returns {file} documentation.html
+ */
 app.get('/documentation', (req, res) => {
   res.sendFile('public/documentation.html', { root: __dirname});
 });
